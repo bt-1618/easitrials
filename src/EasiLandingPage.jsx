@@ -26,6 +26,11 @@ const GlobalStyles = () => (
       transform-origin: center center;
       will-change: transform;
     }
+    @media (max-width: 640px) {
+      .showcase-tilt { animation: none; transform: none; }
+      .showcase-sidebar { display: none; }
+      .showcase-window { font-size: 11px; }
+    }
     /* Glow pulse on the shadow layer */
     @keyframes glow-pulse {
       0%, 100% { opacity: 0.25; transform: translateY(8px) scale(1); }
@@ -301,7 +306,7 @@ function Hero() {
       <div className="absolute top-1/2 right-1/4 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/60 pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-16 items-center">
+      <div className="relative max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
         {/* Left copy */}
         <div className="space-y-8">
           {/* Badge */}
@@ -311,7 +316,7 @@ function Hero() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight" style={{ letterSpacing: "-0.03em" }}>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight" style={{ letterSpacing: "-0.03em" }}>
             Your protocol PDF,{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-indigo-300">
               turned into a workflow
@@ -320,7 +325,7 @@ function Hero() {
           </h1>
 
           {/* Subheadline */}
-          <p className="text-xl text-blue-100/70 leading-relaxed max-w-lg">
+          <p className="text-lg sm:text-xl text-blue-100/70 leading-relaxed max-w-lg">
             Easi extracts inclusion/exclusion criteria, visit schedules, labs, and adverse event requirements — then turns them into structured checklists, reminders, and an audit-ready system your site can trust.
           </p>
 
@@ -350,8 +355,10 @@ function Hero() {
 
         </div>
 
-        {/* Right: Dashboard mockup */}
-        <DashboardMockup />
+        {/* Right: Dashboard mockup — hidden on small screens */}
+        <div className="hidden lg:block">
+          <DashboardMockup />
+        </div>
       </div>
     </section>
   );
@@ -386,7 +393,7 @@ function ProblemSection() {
         <div className="inline-block bg-slate-800 text-slate-300 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest">
           The problem
         </div>
-        <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
           Protocols are 200-page documents.<br />
           <span className="text-slate-400">Your team runs them from memory and spreadsheets.</span>
         </h2>
@@ -454,7 +461,7 @@ function HowItWorks() {
           <div className="inline-block bg-blue-50 text-blue-600 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest">
             How it works
           </div>
-          <h2 className="text-4xl font-bold text-slate-900">From protocol to execution in minutes</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">From protocol to execution in minutes</h2>
           <p className="text-lg text-slate-500 max-w-xl mx-auto">
             No setup fees. No custom implementation. Upload your protocol and your team is operational the same day.
           </p>
@@ -485,9 +492,11 @@ function HowItWorks() {
 
                 {/* Visual */}
                 <div className="flex-1 bg-gradient-to-br from-slate-50 to-blue-50 border border-slate-200 rounded-2xl p-8 flex items-center justify-center min-h-48">
-                  {i === 0 && <UploadVisual />}
-                  {i === 1 && <WorkflowVisual />}
-                  {i === 2 && <AuditVisual />}
+                  <div className="overflow-x-auto w-full">
+                    {i === 0 && <UploadVisual />}
+                    {i === 1 && <WorkflowVisual />}
+                    {i === 2 && <AuditVisual />}
+                  </div>
                 </div>
               </div>
             ))}
@@ -737,7 +746,7 @@ function Features() {
           <div className="inline-block bg-white border border-slate-200 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest">
             Features
           </div>
-          <h2 className="text-4xl font-bold text-slate-900">Built for how clinical trials actually run</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Built for how clinical trials actually run</h2>
           <p className="text-lg text-slate-500 max-w-xl mx-auto">
             Every feature maps to a real operational task your coordinators do every day — just without the manual overhead.
           </p>
@@ -791,7 +800,7 @@ function AppShowcase() {
           <div className="inline-block bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest">
             See it in action
           </div>
-          <h2 className="text-4xl font-bold text-slate-900">Every screen built for the CRC</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">Every screen built for the CRC</h2>
           <p className="text-lg text-slate-500 max-w-xl mx-auto">
             Easi surfaces exactly what your coordinators need, when they need it — no digging through folders.
           </p>
@@ -818,7 +827,7 @@ function AppShowcase() {
 
         {/* Screen */}
         <div
-          className="transition-all duration-200"
+          className="transition-all duration-200 overflow-x-auto pb-4"
           style={{ opacity: animating ? 0 : 1, transform: animating ? "translateY(8px)" : "translateY(0)" }}
         >
           {activeTab === 0 && <ShowcaseTrialHealth />}
@@ -841,7 +850,7 @@ function ShowcaseSidebar({ active }) {
     { icon: "✓", label: "Audit Log" },
   ];
   return (
-    <div className="w-48 bg-slate-900 p-4 flex-shrink-0 flex flex-col gap-1">
+    <div className="showcase-sidebar w-44 bg-slate-900 p-3 flex-shrink-0 flex flex-col gap-1">
       <div className="flex items-center gap-2 mb-4 px-1">
         <div className="relative w-6 h-6 flex-shrink-0">
           <div className="absolute inset-0 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600" />
@@ -910,7 +919,7 @@ function ShowcaseTrialHealth() {
             Live
           </div>
         } />
-        <div className="flex" style={{ minHeight: 430 }}>
+        <div className="flex" style={{ minHeight: "min(430px, 60vw)" }}>
           <ShowcaseSidebar active="Trial Health" />
           <div className="flex-1 p-5 bg-white space-y-4 overflow-hidden">
             <div className="flex items-center justify-between">
@@ -1015,7 +1024,7 @@ function ShowcasePatientBoard() {
         <WindowChrome title="Patient Board · AUR-101" right={
           <div className="bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-lg">+ Enroll Patient</div>
         } />
-        <div className="flex" style={{ minHeight: 420 }}>
+        <div className="flex" style={{ minHeight: "min(420px, 60vw)" }}>
           <ShowcaseSidebar active="Patient Board" />
           <div className="flex-1 p-4 overflow-hidden">
             <div className="grid grid-cols-4 gap-3 h-full">
@@ -1067,7 +1076,7 @@ function ShowcaseDeviations() {
       <div className="shadow-glow absolute inset-0 translate-y-8 blur-3xl bg-amber-600/15 rounded-3xl" />
       <div className="relative bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden">
         <WindowChrome title="Deviation Management · ONCO-2024-01" />
-        <div className="flex" style={{ minHeight: 420 }}>
+        <div className="flex" style={{ minHeight: "min(420px, 60vw)" }}>
           <ShowcaseSidebar active="Deviations" />
           <div className="flex-1 p-5 space-y-3 overflow-hidden">
             <div className="flex items-center justify-between">
@@ -1183,7 +1192,7 @@ function ShowcaseActivityLog() {
             <div className="bg-slate-100 text-slate-600 text-xs font-semibold px-2.5 py-1 rounded-lg">Export</div>
           </div>
         } />
-        <div className="flex" style={{ minHeight: 420 }}>
+        <div className="flex" style={{ minHeight: "min(420px, 60vw)" }}>
           <ShowcaseSidebar active="Audit Log" />
           <div className="flex-1 p-5 overflow-hidden relative">
             {/* Scanning line */}
@@ -1275,7 +1284,7 @@ function Testimonials() {
           <div className="inline-block bg-white border border-slate-200 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest">
             From the field
           </div>
-          <h2 className="text-4xl font-bold text-slate-900">What research teams say</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900">What research teams say</h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -1302,7 +1311,7 @@ function CTA() {
   return (
     <section className="py-24 bg-gradient-to-br from-blue-600 to-indigo-700">
       <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
-        <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
           Ready to stop running trials from a spreadsheet?
         </h2>
         <p className="text-xl text-blue-200 max-w-xl mx-auto">
