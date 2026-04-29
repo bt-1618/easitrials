@@ -3,8 +3,9 @@ import { useState, useEffect, useRef } from "react";
 // Inject Google Font + global styles
 const GlobalStyles = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
     * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-display { font-family: 'Crimson Pro', Georgia, serif; }
 
     @keyframes float-slow {
       0%, 100% { transform: translateY(0px) rotate(-1deg); }
@@ -111,6 +112,22 @@ function cn(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
+// ─── Easi Logo Mark ──────────────────────────────────────────────────────────
+function EasiLogo({ scrolled, size = "md", dark = false }) {
+  const textColor = dark ? "#1e40af" : scrolled === false ? "white" : scrolled ? "#1e293b" : "white";
+  const s = size === "lg" ? 1.5 : size === "sm" ? 0.7 : 1;
+  return (
+    <div className="flex items-center gap-1" style={{ transform: `scale(${s})`, transformOrigin: "left center" }}>
+      <svg width="72" height="36" viewBox="0 0 72 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* Bold "Easi" text as SVG paths */}
+        <text x="0" y="28" fontFamily="'Crimson Pro', Georgia, serif" fontWeight="700" fontSize="32" fill={dark ? "#1e40af" : scrolled === false ? "white" : scrolled ? "#1e293b" : "white"}>Easi</text>
+        {/* Checkmark above the i */}
+        <path d="M54 6 L58 11 L65 2" stroke={dark ? "#1e40af" : "#60a5fa"} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      </svg>
+    </div>
+  );
+}
+
 // ─── Navbar ─────────────────────────────────────────────────────────────────
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -128,21 +145,8 @@ function Navbar() {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <div className="relative w-9 h-9 flex-shrink-0">
-            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 shadow-lg" />
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" className="relative z-10">
-              {/* Stylised "E" built from three precise horizontal bars — clean, geometric, confident */}
-              <rect x="10" y="10" width="16" height="3" rx="1.5" fill="white"/>
-              <rect x="10" y="16.5" width="11" height="3" rx="1.5" fill="white" opacity="0.8"/>
-              <rect x="10" y="23" width="16" height="3" rx="1.5" fill="white"/>
-              {/* Tiny accent dot — signals the "AI" precision angle */}
-              <circle cx="27" cy="18" r="2" fill="#93c5fd"/>
-            </svg>
-          </div>
-          <span className={cn("text-xl font-extrabold tracking-tight transition-colors", scrolled ? "text-slate-900" : "text-white")} style={{ letterSpacing: "-0.04em" }}>easi</span>
-        </div>
+        {/* Logo — matches brand mark */}
+        <EasiLogo scrolled={scrolled} />
 
         {/* CTA only */}
         <a
@@ -311,21 +315,20 @@ function Hero() {
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl lg:text-6xl font-extrabold text-white leading-tight" style={{ letterSpacing: "-0.03em" }}>
-            Your protocol PDF,{" "}
+          <h1 className="font-display text-5xl lg:text-6xl font-bold text-white leading-tight">
+            Protocol compliance{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-indigo-300">
-              turned into a workflow
-            </span>{" "}
-            your team can actually run.
+              made easy.
+            </span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-xl text-blue-100/70 leading-relaxed max-w-lg">
-            Easi extracts inclusion/exclusion criteria, visit schedules, labs, and adverse event requirements — then turns them into structured checklists, reminders, and an audit-ready system your site can trust.
+            Easi converts static clinical trial protocols into executable workflows used daily by coordinators. Instead of manually tracking patient-specific protocol requirements, coordinators run every patient through Easi — ensuring protocol compliance in real time.
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          {/* CTA */}
+          <div className="flex items-start gap-4">
             <a
               href="https://calendly.com/harshita-easitrials/30min"
               target="_blank" rel="noopener noreferrer"
@@ -335,16 +338,6 @@ function Hero() {
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-            </a>
-            <a
-              href="#how-it-works"
-              className="inline-flex items-center gap-2 text-white/80 font-semibold px-6 py-3.5 rounded-xl border border-white/20 hover:bg-white/10 hover:text-white transition-all backdrop-blur-sm"
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.4"/>
-                <path d="M6.5 5.5l4 2.5-4 2.5V5.5z" fill="currentColor"/>
-              </svg>
-              See how it works
             </a>
           </div>
 
@@ -384,40 +377,26 @@ function ProblemSection() {
     <section className="py-24 bg-slate-900 text-white">
       <div className="max-w-5xl mx-auto px-6 text-center space-y-6">
         <div className="inline-block bg-slate-800 text-slate-300 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest">
-          The problem
+          The Problem
         </div>
-        <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
-          Protocols are 200-page documents.<br />
-          <span className="text-slate-400">Your team runs them from memory and spreadsheets.</span>
+        <h2 className="font-display text-4xl lg:text-5xl font-bold leading-tight">
+          One Coordinator. Six Trials. Forty Patients.
         </h2>
         <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          Coordinators spend hours manually decoding protocols, building trackers from scratch, and hoping nothing falls through the cracks before the next monitoring visit.
+          A research coordinator at a busy site manages hundreds of protocol-mandated procedures across multiple active trials with unique requirements and no margin for error.
         </p>
 
-        <div className="grid md:grid-cols-3 gap-6 pt-8 text-left">
-          {[
-            {
-              icon: "📄",
-              title: "Hours lost to protocol review",
-              desc: "Coordinators manually re-read protocols before every visit to find the right labs, exclusion criteria, or timing windows.",
-            },
-            {
-              icon: "⚠️",
-              title: "Missed steps = deviations",
-              desc: "One overlooked eligibility criterion or delayed lab draw becomes a protocol deviation — and a sponsor finding.",
-            },
-            {
-              icon: "📊",
-              title: "Spreadsheets don't scale",
-              desc: "Tracking AEs, deviations, and consent timelines across 10+ participants in Excel is a compliance risk waiting to happen.",
-            },
-          ].map(({ icon, title, desc }) => (
-            <div key={title} className="bg-slate-800 border border-slate-700 rounded-2xl p-6 space-y-3">
-              <div className="text-2xl">{icon}</div>
-              <div className="font-semibold text-white">{title}</div>
-              <div className="text-sm text-slate-400 leading-relaxed">{desc}</div>
-            </div>
-          ))}
+        <div className="grid md:grid-cols-2 gap-8 pt-8 text-left">
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-8 space-y-4">
+            <div className="text-6xl font-display font-bold text-blue-400">36%</div>
+            <div className="text-lg font-semibold text-white">Failure rate in clinical trial site inspections</div>
+            <div className="text-sm text-slate-400 leading-relaxed">Protocol noncompliance, deviations, and inadequate documentation are leading issues — the result of managing complex clinical trials with manual workflows still used at most sites: spreadsheets, sticky notes, and tribal knowledge.</div>
+          </div>
+          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-8 space-y-4">
+            <div className="text-6xl font-display font-bold text-blue-400">61%</div>
+            <div className="text-lg font-semibold text-white">Annual turnover rate for research coordinators</div>
+            <div className="text-sm text-slate-400 leading-relaxed">At a 61% annual CRC turnover rate, patient-level, day-to-day context breaks down, disrupting trial continuity and increasing the risk of missed visits, deviations, and delays.</div>
+          </div>
         </div>
       </div>
     </section>
@@ -1233,13 +1212,13 @@ function Stats() {
     <section className="py-20 bg-white border-y border-slate-100">
       <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
         {[
-          { value: "< 5 min", label: "Protocol import time" },
-          { value: "~8 hrs", label: "Saved per week per coordinator" },
-          { value: "Zero", label: "Spreadsheets required" },
-          { value: "100%", label: "Audit trail coverage" },
+          { value: "20k+", label: "U.S. clinical trial sites" },
+          { value: "36%", label: "Site inspection failure rate" },
+          { value: "61%", label: "Annual CRC turnover rate" },
+          { value: "$50K+", label: "Cost per deviation per study" },
         ].map(({ value, label }) => (
           <div key={label} className="space-y-2">
-            <div className="text-4xl font-bold text-blue-600">{value}</div>
+            <div className="font-display text-4xl font-bold text-blue-600">{value}</div>
             <div className="text-sm text-slate-500 font-medium">{label}</div>
           </div>
         ))}
@@ -1302,28 +1281,22 @@ function CTA() {
   return (
     <section className="py-24 bg-gradient-to-br from-blue-600 to-indigo-700">
       <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
-        <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-          Ready to stop running trials from a spreadsheet?
+        <h2 className="font-display text-4xl lg:text-5xl font-bold text-white leading-tight">
+          Easi reduces the operational burden and risk of costly protocol deviations.
         </h2>
         <p className="text-xl text-blue-200 max-w-xl mx-auto">
-          See how Easi turns your next protocol into a workflow your whole site can execute on — starting day one.
+          See how Easi turns your protocol into a workflow your whole site can execute on — starting day one.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="flex items-center justify-center">
           <a
             href="https://calendly.com/harshita-easitrials/30min"
             target="_blank" rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-white text-blue-700 font-semibold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg"
+            className="inline-flex items-center gap-2 bg-white text-blue-700 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg"
           >
             Book a demo
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-          </a>
-          <a
-            href="#"
-            className="inline-flex items-center gap-2 text-white font-semibold px-8 py-4 rounded-xl border border-white/30 hover:bg-white/10 transition-colors"
-          >
-            See how it works
           </a>
         </div>
         <p className="text-sm text-blue-300">No commitment required · Works with any protocol PDF</p>
@@ -1333,75 +1306,69 @@ function CTA() {
 }
 
 // ─── Footer ──────────────────────────────────────────────────────────────────
-function Footer() {
-  return (
-    <footer className="bg-slate-900 text-slate-400 py-16">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid md:grid-cols-4 gap-10 mb-12">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="relative w-8 h-8 flex-shrink-0">
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700" />
-                <svg width="32" height="32" viewBox="0 0 36 36" fill="none" className="relative z-10">
-                  <rect x="10" y="10" width="16" height="3" rx="1.5" fill="white"/>
-                  <rect x="10" y="16.5" width="11" height="3" rx="1.5" fill="white" opacity="0.8"/>
-                  <rect x="10" y="23" width="16" height="3" rx="1.5" fill="white"/>
-                  <circle cx="27" cy="18" r="2" fill="#93c5fd"/>
-                </svg>
-              </div>
-              <span className="text-white font-extrabold text-lg" style={{ letterSpacing: "-0.04em" }}>easi</span>
-            </div>
-            <p className="text-sm leading-relaxed">
-              AI-powered clinical trial operations for sites that can't afford to miss a step.
-            </p>
-          </div>
+// ─── Team ────────────────────────────────────────────────────────────────────
+function Team() {
+  const members = [
+    {
+      name: "Bhavik Tadigotla",
+      role: "Co-founder",
+      bio: "MD Candidate at UT Southwestern Medical School with 3+ years as a Clinical Research Coordinator. Prior experience spans AI healthcare startups and healthcare consulting.",
+      photo: "/bhavik.jpg",
+    },
+    {
+      name: "Harshita Ganipineni",
+      role: "Co-founder",
+      bio: "Product and strategy operator in high-growth tech. Analyst at Deloitte Digital, with prior roles at Tesla and JPMorgan, and a former medtech co-founder.",
+      photo: "/harshita.jpg",
+    },
+  ];
 
-          {[
-            {
-              heading: "Product",
-              links: ["Protocol import", "Visit checklists", "AE tracking", "Deviation management", "Audit logs"],
-            },
-            {
-              heading: "For teams",
-              links: ["Research coordinators", "Site managers", "Principal investigators", "Sponsor oversight"],
-            },
-            {
-              heading: "Company",
-              links: ["About", "Careers", "Privacy policy", "Terms of service", "Contact"],
-            },
-          ].map(({ heading, links }) => (
-            <div key={heading}>
-              <div className="text-white font-semibold text-sm mb-4">{heading}</div>
-              <ul className="space-y-2.5">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-sm hover:text-white transition-colors">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+  return (
+    <section className="py-24 bg-white">
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center mb-16 space-y-4">
+          <div className="inline-block bg-slate-100 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest">
+            The Team
+          </div>
+          <h2 className="font-display text-4xl font-bold text-slate-900">Built by people who have done this work</h2>
+          <p className="text-lg text-slate-500 max-w-xl mx-auto">
+            Easi was founded by a CRC and a product operator who saw firsthand how broken clinical trial operations are.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-10">
+          {members.map(({ name, role, bio, photo }) => (
+            <div key={name} className="flex flex-col items-center text-center space-y-5 bg-slate-50 rounded-3xl p-10 border border-slate-100">
+              <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg flex-shrink-0">
+                <img
+                  src={photo}
+                  alt={name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                    e.target.parentElement.innerHTML = `<div style="width:100%;height:100%;background:linear-gradient(135deg,#1e3a6e,#2563eb);display:flex;align-items:center;justify-content:center;color:white;font-size:2rem;font-weight:700">${name.charAt(0)}</div>`;
+                  }}
+                />
+              </div>
+              <div>
+                <div className="font-display text-2xl font-bold text-slate-900">{name}</div>
+                <div className="text-sm font-semibold text-blue-600 mt-1 uppercase tracking-wider">{role}</div>
+              </div>
+              <p className="text-slate-500 leading-relaxed text-sm">{bio}</p>
             </div>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
 
-        <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs">© 2025 Easi Health Inc. All rights reserved.</p>
-          <div className="flex items-center gap-4 text-xs">
-            <span className="flex items-center gap-1.5">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M6 1l1 3h3l-2.5 2 1 3L6 7.5 3.5 9l1-3L2 4h3z" fill="#10b981"/>
-              </svg>
-              HIPAA-ready
-            </span>
-            <span className="flex items-center gap-1.5">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M6 1l1 3h3l-2.5 2 1 3L6 7.5 3.5 9l1-3L2 4h3z" fill="#10b981"/>
-              </svg>
-              SOC 2 compliant
-            </span>
-          </div>
-        </div>
+function Footer() {
+  return (
+    <footer className="bg-slate-900 text-slate-400 py-10">
+      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <EasiLogo scrolled={true} />
+        <p className="text-xs text-slate-500">© 2025 Easi Health Inc. All rights reserved.</p>
       </div>
     </footer>
   );
@@ -1419,6 +1386,7 @@ export default function EasiLandingPage() {
       <Features />
       <AppShowcase />
       <Stats />
+      <Team />
       <CTA />
       <Footer />
 
